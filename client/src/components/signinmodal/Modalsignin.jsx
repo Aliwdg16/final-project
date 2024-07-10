@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/UserProvider.jsx";
 import axios from "axios";
 
-const Modalsignin = ({ isModalOpen, toggleModal }) => {
+const Modalsignin = ({ isLoginModalOpen, toggleLoginModal }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -12,14 +12,22 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
   const [role, setRole] = useState("client");
 
   const navigate = useNavigate();
-
+  const deploy = import.meta.env.VITE_DEPLOY_URL;
   // ${deploy}
-  
+
+
+  useEffect(() => {
+    const storedAuth = localStorage.getItem('auth');
+    if (storedAuth === 'true') {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (client === false) {
       try {
-        const deploy = import.meta.env.VITE_DEPLOY_URL;
         const response = await axios.post(
           `${deploy}/clients/login`,
           {
@@ -33,10 +41,11 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
         );
 
         if (response.status === 200) {
+          localStorage.setItem('auth', 'true');
           setIsLoggedIn(true);
           checkUser();
           navigate("/Dashboard");
-          toggleModal();
+          toggleLoginModal();
         }
       } catch (error) {
         setError(error.message || "Something went wrong with Login");
@@ -49,7 +58,6 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
   const handleLoginprofi = async (e) => {
     e.preventDefault();
     try {
-      const deploy = import.meta.env.VITE_DEPLOY_URL;
       const response = await axios.post(
         `${deploy}/pros/login`,
         {
@@ -63,17 +71,18 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
       );
 
       if (response.status === 200) {
+        localStorage.setItem('auth', 'true');
         setIsLoggedIn(true);
         checkUser();
-        navigate("/");
-        toggleModal();
+        navigate("/Dashboard");
+        toggleLoginModal();
       }
     } catch (error) {
       setError(error.message || "Something went wrong with Login");
     }
   };
 
-  if (!isModalOpen) return null;
+  if (!isLoginModalOpen) return null;
 
   return (
     <>
@@ -82,7 +91,7 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
         id="authentication-modal"
         tabIndex="-1"
         aria-hidden="true"
-        className="fixed inset-0 z-50 flex justify-center items-center w-full h-full overflow-y-auto bg-gray-500 bg-opacity-90"
+        className="fixed inset-0 z-50 flex justify-center items-center w-full h-full overflow-y-auto bg-gray-900/70"
       >
         <div className="relative p-4 w-full max-w-md max-h-full">
           {/* Modal content */}
@@ -92,11 +101,11 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
             method="POST"
             onSubmit={handleLogin}
           >
-            <div className="flex flex-1 flex-col w-fit m-auto justify-center px-6 py-12 lg:px-8 shadow shadow-gray-900 rounded-lg p-6 border-gray-200 bg-white/75 dark:bg-gray-900/80">
+            <div className="flex flex-1 flex-col w-fit m-auto justify-center px-6 py-12 lg:px-8 shadow shadow-gray-900 rounded-lg p-6 border-gray-200 bg-white dark:bg-gray-900 dark:border-teal-300">
               <div className="absolute top-0 right-0 p-4 mr-8 mt-4 ">
                 <button
                   type="button"
-                  onClick={toggleModal}
+                  onClick={toggleLoginModal}
                   className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   <svg
@@ -202,7 +211,7 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
                       type="email"
                       autoComplete="email"
                       required
-                      className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm shadow-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
@@ -219,14 +228,7 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
                     </label>
 
                     <div className="text-sm">
-                      <Link to="/reset-pass">
-                        <a
-                          href="#"
-                          className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-blue-500 dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-                        >
-                          Forgot password?
-                        </a>
-                      </Link>
+                      <Link to="/reset-pass">Forgot password?</Link>
                     </div>
                   </div>
 
@@ -237,7 +239,7 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
                       type="password"
                       autoComplete="current-password"
                       required
-                      className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm shadow-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
@@ -255,7 +257,7 @@ const Modalsignin = ({ isModalOpen, toggleModal }) => {
                     Not registered ?{" "}
                     <Link
                       to="/signup"
-                      onClick={toggleModal}
+                      onClick={toggleLoginModal}
                       className="text-blue-500 underline"
                     >
                       Register here

@@ -5,7 +5,7 @@ import axios from "axios";
 
 const styles = {
   userButton:
-    "flex text-sm bg-gray-800 rounded-full md:me-3 p-1 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600",
+    "flex text-sm bg-teal-600 rounded-full md:me-3 p-1 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600",
   userImage: "w-8 h-8 rounded-full",
   dropdown:
     "z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600",
@@ -28,6 +28,13 @@ const UserDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  // useEffect(() => {
+  //   const storedAuth = localStorage.getItem('auth');
+  //   if (storedAuth === 'true') {
+  //     setIsLoggedIn(true);
+  //   }
+  // }, []);
+
   const handleLogout = async () => {
     try {
       await axios.post(
@@ -35,19 +42,20 @@ const UserDropdown = () => {
         {},
         { withCredentials: true }
       );
+      localStorage.removeItem('auth');
       setIsLoggedIn(false);
       setIsDropdownOpen(false);
       setUserData({});
       navigate("/");
     } catch (error) {
-      console.log("Error:", error.message);
-      console.log("Error:", error.response.data);
+    //  console.log("Error:", error.message);
+    //  console.log("Error:", error.response.data);
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log("Response data:", error.response.data);
-        console.log("Response status:", error.response.status);
-        console.log("Response headers:", error.response.headers);
+        //    console.log("Response data:", error.response.data);
+        //    console.log("Response status:", error.response.status);
+        //    console.log("Response headers:", error.response.headers);
       }
     }
   };
@@ -95,11 +103,11 @@ const UserDropdown = () => {
               Settings
             </a>
           </li>
-          <li>
+          {/* <li>
             <Link to="/order" className={styles.dropdownItem}>
               My Task
             </Link>
-          </li>
+          </li> */}
           <li>
             <a onClick={handleLogout} className={styles.dropdownItem}>
               Sign out

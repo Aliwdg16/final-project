@@ -1,5 +1,5 @@
 const styles = {
-  container: "flex flex-col justify-center bg-white/75 dark:bg-gray-900/80",
+  container: "flex flex-col justify-center bg-slate-100/50 dark:bg-gray-900",
   content: "my-16 p-5 flex flex-col items-center gap-16",
   header: "flex flex-col gap-2 text-center",
   title:
@@ -55,9 +55,9 @@ const HowItWorks = () => {
           </div>
         </div>
         <div className={styles.stepsWrapper}>
-          {steps.map((step) => {
+          {steps.map((step, index) => {
             return (
-              <>
+              <div key={index}>
                 <div className={styles.stepContainer}>
                   <img
                     className="w-36 h-36 m-auto"
@@ -101,7 +101,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                 )}
-              </>
+              </div>
             );
           })}
         </div>

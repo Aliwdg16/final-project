@@ -7,11 +7,9 @@ import Signup from "./components/Signup";
 import Signin from "./components/Signin";
 import ResetPassword from "./components/ResetPassword";
 import Modalsignin from "./components/signinmodal/Modalsignin";
-import Taskoverview from "./components/Aufträge/Taskoverview";
-import MatchingPage from "./components/Aufträge/MatchingPage";
-import NewPost from "./components/Aufträge/CreatTask";
-import UpdateTask from "./components/Aufträge/UpdateTask";
 import NotFound from "./components/NotFound";
+import About from "./components/user-area/taxmaxheader/About";
+import Contact from "./components/user-area/taxmaxheader/Contact";
 
 function App() {
   return (
@@ -23,11 +21,10 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/reset-pass" element={<ResetPassword />} />
-        <Route path ="/order" element={<UpdateTask />} />
-        <Route path="/taskoverview" element={<Taskoverview />} />
         <Route path="/modalsignin" element={<Modalsignin />} />
-        <Route path="/Match" element={<MatchingPage /> }/>
-        <Route path='*' element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </>
   );
